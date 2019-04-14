@@ -169,9 +169,9 @@ cause:
   name: FastServerError
   message: "server error: user 'bob' is not authorized"
   cause:
-    name: UnauthorizedError
-    message: "user 'bob' is not authorized"
-    rpcUser: "bob"
+  name: UnauthorizedError
+  message: "user 'bob' is not authorized"
+  rpcUser: "bob"
 ```
 
 When the caller uses `ChainError.getInfo()`, the information properties are collapsed
@@ -281,9 +281,9 @@ argument is not an object or an instance of some `Error`.
 
 Property name | Type   | Meaning
 ------------- | ------ | -------
-`name`        | string | Programmatically-usable name of the error.
-`message`     | string | Human-readable summary of the failure. Programmatically-accessible details are provided through `ChainError.getInfo(err)` class method.
-`stack`       | string | Human-readable stack trace where the Error was constructed.
+`name`  | string | Programmatically-usable name of the error.
+`message`   | string | Human-readable summary of the failure. Programmatically-accessible details are provided through `ChainError.getInfo(err)` class method.
+`stack`   | string | Human-readable stack trace where the Error was constructed.
 
 The `stack` property is managed entirely by the underlying JavaScript
 implementation. It's generally implemented using a getter function because
@@ -363,9 +363,9 @@ const err2 = new ChainError(
     'name': 'ConnectionError',
     'cause': err1,
     'info': {
-      'errno': 'ECONNREFUSED',
-      'remote_ip': '127.0.0.1',
-      'port': 215
+    'errno': 'ECONNREFUSED',
+    'remote_ip': '127.0.0.1',
+    'port': 215
     }
   }
 );
@@ -383,14 +383,14 @@ failed to connect to "127.0.0.1:215": something bad happened
 ConnectionError
 { errno: 'ECONNREFUSED', remote_ip: '127.0.0.1', port: 215 }
 ConnectionError: failed to connect to "127.0.0.1:215": something bad happened
-    at Object.<anonymous> (/home/dap/node-chain-error/examples/info.js:5:12)
-    at Module._compile (module.js:456:26)
-    at Object.Module._extensions..js (module.js:474:10)
-    at Module.load (module.js:356:32)
-    at Function.Module._load (module.js:312:12)
-    at Function.Module.runMain (module.js:497:10)
-    at startup (node.js:119:16)
-    at node.js:935:3
+  at Object.<anonymous> (/home/dap/node-chain-error/examples/info.js:5:12)
+  at Module._compile (module.js:456:26)
+  at Object.Module._extensions..js (module.js:474:10)
+  at Module.load (module.js:356:32)
+  at Function.Module._load (module.js:312:12)
+  at Function.Module.runMain (module.js:497:10)
+  at startup (node.js:119:16)
+  at node.js:935:3
 ```
 
 Information properties are inherited up the cause chain, with values at the top
@@ -420,14 +420,14 @@ request failed: failed to connect to "127.0.0.1:215": something bad happened
 RequestError
 { errno: 'EBADREQUEST', remote_ip: '127.0.0.1', port: 215 }
 RequestError: request failed: failed to connect to "127.0.0.1:215": something bad happened
-    at Object.<anonymous> (/home/dap/node-chain-error/examples/info.js:20:12)
-    at Module._compile (module.js:456:26)
-    at Object.Module._extensions..js (module.js:474:10)
-    at Module.load (module.js:356:32)
-    at Function.Module._load (module.js:312:12)
-    at Function.Module.runMain (module.js:497:10)
-    at startup (node.js:119:16)
-    at node.js:935:3
+  at Object.<anonymous> (/home/dap/node-chain-error/examples/info.js:20:12)
+  at Module._compile (module.js:456:26)
+  at Object.Module._extensions..js (module.js:474:10)
+  at Module.load (module.js:356:32)
+  at Function.Module._load (module.js:312:12)
+  at Function.Module.runMain (module.js:497:10)
+  at startup (node.js:119:16)
+  at node.js:935:3
 ```
 
 You can also print the complete stack trace of combined `Error`s by using
@@ -445,23 +445,23 @@ This outputs:
 
 ```text
 ChainError: something really bad happened here: something bad happened
-    at Object.<anonymous> (/home/dap/node-chain-error/examples/fullStack.js:5:12)
-    at Module._compile (module.js:409:26)
-    at Object.Module._extensions..js (module.js:416:10)
-    at Module.load (module.js:343:32)
-    at Function.Module._load (module.js:300:12)
-    at Function.Module.runMain (module.js:441:10)
-    at startup (node.js:139:18)
-    at node.js:968:3
+  at Object.<anonymous> (/home/dap/node-chain-error/examples/fullStack.js:5:12)
+  at Module._compile (module.js:409:26)
+  at Object.Module._extensions..js (module.js:416:10)
+  at Module.load (module.js:343:32)
+  at Function.Module._load (module.js:300:12)
+  at Function.Module.runMain (module.js:441:10)
+  at startup (node.js:139:18)
+  at node.js:968:3
 caused by: ChainError: something bad happened
-    at Object.<anonymous> (/home/dap/node-chain-error/examples/fullStack.js:3:12)
-    at Module._compile (module.js:409:26)
-    at Object.Module._extensions..js (module.js:416:10)
-    at Module.load (module.js:343:32)
-    at Function.Module._load (module.js:300:12)
-    at Function.Module.runMain (module.js:441:10)
-    at startup (node.js:139:18)
-    at node.js:968:3
+  at Object.<anonymous> (/home/dap/node-chain-error/examples/fullStack.js:3:12)
+  at Module._compile (module.js:409:26)
+  at Object.Module._extensions..js (module.js:416:10)
+  at Module.load (module.js:343:32)
+  at Function.Module._load (module.js:300:12)
+  at Function.Module.runMain (module.js:441:10)
+  at startup (node.js:139:18)
+  at node.js:968:3
 ```
 
 `ChainError.fullStack` is also safe to use on regular `Error`s, so feel free to use
