@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "commonjs",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "stripInternal": true,
+    "declaration": true,
+    "outDir": "../dist-test"
+  },
+  "files": [
+    "../src/index.ts",
+    "./common.ts",
+    "./common.spec.ts",
+    "./context.spec.ts",
+    "./findcause.spec.ts",
+    "./info.spec.ts",
+    "./inherit.spec.ts",
+    "./chain-error.spec.ts",
+  ],
+  "angularCompilerOptions": {
+    "skipTemplateCodegen": true
+  }
+}
