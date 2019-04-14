@@ -1,5 +1,3 @@
-import * as assert from 'assert';
-
 import { ChainError } from '../src/chain-error';
 import { cleanStack } from './common';
 
@@ -43,13 +41,9 @@ describe('ChainError:', () => {
     const suberr = new Error('root cause');
     const err = new ChainError(`proximate cause: ${num} issues`, suberr);
     expect(err.message).toEqual('proximate cause: 3 issues: root cause');
-    const stack = cleanStack(err.stack);
-    assert.strictEqual(
-      stack,
-      ['ChainError: proximate cause: 3 issues: root cause', '    at UserContext.it (dummy filename)'].join('\n') +
-        '\n' +
-        nodestack
-    );
+    const actualStack = cleanStack(err.stack);
+    const expectedStack = `ChainError: proximate cause: 3 issues: root cause\n    at UserContext.it (dummy filename)\n${nodestack}`;
+    expect(actualStack).toBe(expectedStack);
   });
 
   it('caused by another ChainError, with annotation', () => {
@@ -72,20 +66,11 @@ describe('ChainError:', () => {
   it('fullStack', () => {
     const suberr = new ChainError('mid', new Error('root cause'));
     const err = new ChainError('top', suberr);
-    const stack = cleanStack(ChainError.getFullStack(err));
-    assert.strictEqual(
-      stack,
-      ['ChainError: top: mid: root cause', '    at UserContext.it (dummy filename)'].join('\n') +
-        '\n' +
-        nodestack +
-        '\n' +
-        ['caused by: ChainError: mid: root cause', '    at UserContext.it (dummy filename)'].join('\n') +
-        '\n' +
-        nodestack +
-        '\n' +
-        ['caused by: Error: root cause', '    at UserContext.it (dummy filename)'].join('\n') +
-        '\n' +
-        nodestack
+    const actualStack = cleanStack(ChainError.getFullStack(err));
+    expect(actualStack).toBe(
+      `ChainError: top: mid: root cause\n    at UserContext.it (dummy filename)\n${nodestack}\n` +
+        `caused by: ChainError: mid: root cause\n    at UserContext.it (dummy filename)\n${nodestack}\n` +
+        `caused by: Error: root cause\n    at UserContext.it (dummy filename)\n${nodestack}`
     );
   });
 
@@ -93,7 +78,7 @@ describe('ChainError:', () => {
     const err = new ChainError(null, null, true);
     expect(err.toString()).toEqual('ChainError');
     const stack = cleanStack(err.stack);
-    expect(stack).toEqual(['ChainError', '    at UserContext.it (dummy filename)'].join('\n') + '\n' + nodestack);
+    expect(stack).toEqual(`ChainError\n    at UserContext.it (dummy filename)\n${nodestack}`);
   });
 
   it('options-argument form', () => {
@@ -105,9 +90,7 @@ describe('ChainError:', () => {
     expect(err.message).toEqual('my error');
     expect(err.toString()).toEqual('ChainError: my error');
     const stack = cleanStack(err.stack);
-    expect(stack).toEqual(
-      ['ChainError: my error', '    at UserContext.it (dummy filename)'].join('\n') + '\n' + nodestack
-    );
+    expect(stack).toEqual(`ChainError: my error\n    at UserContext.it (dummy filename)\n${nodestack}`);
 
     err = new ChainError('my error', {}, true);
     expect(err.toString()).toEqual('ChainError: my error');
@@ -130,15 +113,17 @@ describe('ChainError:', () => {
     expect(err.message).toEqual('proximate cause: 3 issues');
     expect(err.toString()).toEqual('ChainError: proximate cause: 3 issues; ' + 'caused by Error: root cause');
     let stack = cleanStack(err.stack);
-    /* See the comment in tst.inherit.js. */
-    const stackmessageTop = 'ChainError: proximate cause: 3 issues';
-    expect(stack).toEqual([stackmessageTop, '    at UserContext.it (dummy filename)'].join('\n') + '\n' + nodestack);
+    expect(stack).toEqual(
+      `ChainError: proximate cause: 3 issues\n    at UserContext.it (dummy filename)\n${nodestack}`
+    );
 
     err = new ChainError(`proximate cause: ${3} issues`, { cause: suberr }, true);
     expect(err.message).toEqual('proximate cause: 3 issues');
     expect(err.toString()).toEqual('ChainError: proximate cause: 3 issues; ' + 'caused by Error: root cause');
     stack = cleanStack(err.stack);
-    expect(stack).toEqual([stackmessageTop, '    at UserContext.it (dummy filename)'].join('\n') + '\n' + nodestack);
+    expect(stack).toEqual(
+      `ChainError: proximate cause: 3 issues\n    at UserContext.it (dummy filename)\n${nodestack}`
+    );
   });
 
   it('caused by another ChainError, with annotation', () => {
@@ -146,17 +131,16 @@ describe('ChainError:', () => {
     const suberr = new ChainError(`proximate cause: ${3} issues`, { cause: suberr1 }, true);
     let err = new ChainError('top', suberr, true);
     expect(err.message).toEqual('top');
-    assert.strictEqual(
-      err.toString(),
-      'ChainError: top; caused by ChainError: ' + 'proximate cause: 3 issues; caused by Error: root cause'
-    );
+    let actualStack = err.toString();
+    let expectedStack = 'ChainError: top; caused by ChainError: proximate cause: 3 issues; caused by Error: root cause';
+    expect(actualStack).toBe(expectedStack);
 
     err = new ChainError('top', { cause: suberr }, true);
     expect(err.message).toEqual('top');
-    assert.strictEqual(
-      err.toString(),
-      'ChainError: top; caused by ChainError: ' + 'proximate cause: 3 issues; caused by Error: root cause'
-    );
+    actualStack = err.toString();
+    expectedStack =
+      'ChainError: top; caused by ChainError: ' + 'proximate cause: 3 issues; caused by Error: root cause';
+    expect(actualStack).toBe(expectedStack);
   });
 
   it('caused by a ChainError', () => {
@@ -170,23 +154,11 @@ describe('ChainError:', () => {
     const suberr = new ChainError('mid', new Error('root cause'), true);
     const err = new ChainError('top', suberr, true);
     const stack = cleanStack(ChainError.getFullStack(err));
-    /* See the comment in tst.inherit.js. */
-    const stackmessageMid = 'ChainError: mid';
-    const stackmessageTop = 'ChainError: top';
 
-    assert.strictEqual(
-      stack,
-      [stackmessageTop, '    at UserContext.it (dummy filename)'].join('\n') +
-        '\n' +
-        nodestack +
-        '\n' +
-        ['caused by: ' + stackmessageMid, '    at UserContext.it (dummy filename)'].join('\n') +
-        '\n' +
-        nodestack +
-        '\n' +
-        ['caused by: Error: root cause', '    at UserContext.it (dummy filename)'].join('\n') +
-        '\n' +
-        nodestack
+    expect(stack).toBe(
+      `ChainError: top\n    at UserContext.it (dummy filename)\n${nodestack}\n` +
+        `caused by: ChainError: mid\n    at UserContext.it (dummy filename)\n${nodestack}\n` +
+        `caused by: Error: root cause\n    at UserContext.it (dummy filename)\n${nodestack}`
     );
   });
 });
