@@ -1,22 +1,19 @@
 # chain-error: rich JavaScript errors
 
-This is a fork of [VError](https://github.com/joyent/node-verror). The module provides several classes in support of Joyent's [Best Practices for
-Error Handling in Node.js](http://www.joyent.com/developers/node/design/errors).
-If you find any of the behavior here confusing or surprising, check out that
-document first.
+This is a fork of [VError](https://github.com/joyent/node-verror).
 
-The error classes here support:
+The `ChainError` support:
 
 * chains of causes
 * properties to provide extra information about the error
 * creating your own subclasses that support all of these
 
-`ChainError`, for chaining errors while preserving each one's error message.
+`ChainError` chaining errors while preserving each one's error message.
 This is useful in servers and command-line utilities when you want to
 propagate an error up a call stack, but allow various levels to add their own
 context. See examples below.
 
-But if you need, you can hiding the lower-level messages from the
+You can hiding the lower-level messages from the
 top-level error. This is useful for API endpoints where you don't want to
 expose internal error messages, but you still want to preserve the error chain
 for logging and debugging.
@@ -31,7 +28,7 @@ npm install @restify-ts/chain-error
 ```
 
 If nothing else, you can use `ChainError` as a drop-in replacement for the built-in
-JavaScript Error class:
+JavaScript `Error` class:
 
 ```ts
 import { ChainError } from '@restify-ts/chain-error';
@@ -47,39 +44,7 @@ This prints:
 missing file: "/etc/passwd"
 ```
 
-You can also pass a `cause` argument, which is any other Error object:
-
-```ts
-import { ChainError } from '@restify-ts/chain-error';
-import * as fs from 'fs';
-
-const filename = '/nonexistent';
-fs.stat(filename, err1 => {
-	const err2 = new ChainError(`stat "${filename}"`, err1);
-	console.error(err2.message);
-});
-```
-
-This prints out:
-
-```text
-stat "/nonexistent": ENOENT, stat '/nonexistent'
-```
-
-which resembles how Unix programs typically report errors:
-
-```bash
-$ sort /nonexistent
-sort: open failed: /nonexistent: No such file or directory
-```
-
-To match the Unixy feel, when you print out the error, just prepend the
-program's name to the ChainError's `message`. Or just call
-[node-cmdutil.fail(your_verror)](https://github.com/joyent/node-cmdutil), which
-does this for you.
-
-Of course, you can chain these as many times as you want, and it works with any
-kind of Error:
+You can also pass a `cause` argument, which is any other `Error` instance:
 
 ```ts
 const err1 = new Error('No such file or directory');
@@ -213,30 +178,15 @@ for the simple cases.
 
 # API
 
-## Constructors
+## Constructor
 
-The `ChainError` constructor has several forms:
+The `ChainError` constructor:
 
 ```ts
-/**
- * This is the most general form. You can specify any supported options
- * (including `cause` and `info`) this way.
- */
-constructor(options: ChainErrorOptions, message?: string);
-/**
- * This is a useful shorthand when the only option you need is `cause`.
- */
-constructor(cause: Error, message?: string);
-/**
- * This is a useful shorthand when you don't need any options at all.
- */
-constructor(message?: string);
+constructor(message?: string, optsOrError?: ChainErrorOptions | Error, skipCauseMessage?: boolean);
 ```
 
-All of these forms construct a new `ChainError` that behaves just like the built-in
-JavaScript `Error` class, with some additional methods described below.
-
-In the first form, `ChainErrorOptions` is a plain object with any of the following
+Where `ChainErrorOptions` is a plain object with any of the following
 optional properties:
 
 ```ts
@@ -268,13 +218,6 @@ interface ChainErrorOptions {
 }
 ```
 
-The second signature of the constructor is equivalent to using the first signature with the specified `cause` as the error's cause.
-
-The third signature is equivalent to using the first signature with all default option
-values. This signature is distinguished from the other signatures because the first
-argument is not an object or an instance of some `Error`.
-
-
 ## Public properties
 
 `ChainError` provide the public properties as JavaScript's built-in Error objects.
@@ -291,8 +234,7 @@ constructing the human-readable stack trace is somewhat expensive.
 
 ## Class methods
 
-The following methods are defined on the `ChainError` class. They're defined this way rather than using methods on `ChainError` instances so that they can be used on Errors not created with
-`ChainError`.
+The following static methods are defined on the `ChainError` class.
 
 ```ts
 class ChainError extends Error {
@@ -351,8 +293,7 @@ class ChainError extends Error {
 
 ## Examples
 
-The "Quick start" section above covers several basic cases. Here's a more advanced
-case:
+More examples:
 
 ```ts
 const err1 = new ChainError('something bad happened');
