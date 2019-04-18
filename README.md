@@ -80,34 +80,34 @@ The two main goals for `ChainError` are:
   metadata** (which we call _informational properties_). Instead of just saying
   "connection refused while connecting to 192.168.1.2:80", you can add
   properties like `"ip": "192.168.1.2"` and `"tcpPort": 80`. This can be used
-  for feeding into monitoring systems, analyzing large numbers of Errors (as
+  for feeding into monitoring systems, analyzing large numbers of errors (as
   from a log file), or localizing error messages.
 
-To really make this useful, it also needs to be easy to compose Errors:
-higher-level code should be able to augment the Errors reported by lower-level
+To really make this useful, it also needs to be easy to compose errors:
+higher-level code should be able to augment the errors reported by lower-level
 code to provide a more complete description of what happened. Instead of saying
 "connection refused", you can say "operation X failed: connection refused".
 That's why `ChainError` supports `causes`.
 
 In order for all this to work, programmers need to know that it's generally safe
-to wrap lower-level Errors with higher-level ones. If you have existing code
-that handles Errors produced by a library, you should be able to wrap those
-Errors with a `ChainError` to add information without breaking the error handling
+to wrap lower-level errors with higher-level ones. If you have existing code
+that handles errors produced by a library, you should be able to wrap those
+errors with a `ChainError` to add information without breaking the error handling
 code. There are two obvious ways that this could break such consumers:
 
 * The error's name might change. People typically use `name` to determine what
-  kind of Error they've got. To ensure compatibility, you can create ChainErrors
+  kind of Error they've got. To ensure compatibility, you can create `ChainError`
   with custom names, but this approach isn't great because it prevents you from
   representing complex failures. For this reason, `ChainError` provides
   `findCauseByName`, which essentially asks: does this Error _or any of its
-  causes_ have this specific type?  If error handling code uses
+  causes_ have this specific name?  If error handling code uses
   `findCauseByName`, then subsystems can construct very specific causal chains
   for debuggability and still let people handle simple cases easily. There's an
   example below.
 * The error's properties might change. People often hang additional properties
-  off of Error objects. If we wrap an existing Error in a new Error, those
+  off of `Error` objects. If we wrap an existing `Error` in a new `Error`, those
   properties would be lost unless we copied them. But there are a variety of
-  both standard and non-standard Error properties that should _not_ be copied in
+  both standard and non-standard `Error` properties that should _not_ be copied in
   this way: most obviously `name`, `message`, and `stack`, but also `fileName`,
   `lineNumber`, and a few others. Plus, it's useful for some Error subclasses
   to have their own private properties -- and there'd be no way to know whether
@@ -119,9 +119,9 @@ code. There are two obvious ways that this could break such consumers:
 Let's put this all together with an example from the `node-fast` RPC library.
 `node-fast` implements a simple RPC protocol for Node programs. There's a server
 and client interface, and clients make RPC requests to servers. Let's say the
-server fails with an UnauthorizedError with message "user 'bob' is not
-authorized". The client wraps all server errors with a FastServerError. The
-client also wraps all request errors with a FastRequestError that includes the
+server fails with an `UnauthorizedError` with message `user 'bob' is not
+authorized`. The client wraps all server errors with a FastServerError. The
+client also wraps all request errors with a `FastRequestError` that includes the
 name of the RPC call being made. The result of this failed RPC might look like
 this:
 
@@ -162,7 +162,7 @@ Taking this apart:
 * If the caller logs this error, the logs can be analyzed to aggregate
   errors by cause, by RPC method name, by user, or whatever. Or the
   error can be correlated with other events for the same rpcMsgid.
-* It wasn't very hard for any part of the code to contribute to this Error.
+* It wasn't very hard for any part of the code to contribute to this error.
   Each part of the stack has just a few lines to provide exactly what it knows,
   with very little boilerplate.
 
@@ -220,7 +220,7 @@ interface ChainErrorOptions {
 
 ## Public properties
 
-`ChainError` provide the public properties as JavaScript's built-in Error objects.
+`ChainError` provide the public properties as JavaScript's built-in `Error` objects.
 
 Property name | Type   | Meaning
 ------------- | ------ | -------
@@ -301,12 +301,12 @@ const err1 = new ChainError('something bad happened');
 const err2 = new ChainError(
   'failed to connect to "127.0.0.1:215"',
   {
-    'name': 'ConnectionError',
-    'cause': err1,
-    'info': {
-    'errno': 'ECONNREFUSED',
-    'remote_ip': '127.0.0.1',
-    'port': 215
+    name: 'ConnectionError',
+    cause: err1,
+    info: {
+      errno: 'ECONNREFUSED',
+      remote_ip: '127.0.0.1',
+      port: 215
     }
   }
 );
@@ -342,9 +342,9 @@ example:
 const err3 = new ChainError(
   'request failed',
   {
-    'name': 'RequestError',
-    'cause': err2,
-    'info': { 'errno': 'EBADREQUEST' }
+    name: 'RequestError',
+    cause: err2,
+    info: { errno: 'EBADREQUEST' }
   }
 );
 
@@ -386,7 +386,7 @@ This outputs:
 
 ```text
 ChainError: something really bad happened here: something bad happened
-  at Object.<anonymous> (/home/dap/node-chain-error/examples/fullStack.js:5:12)
+  at Object.<anonymous> (/home/dap/node-chain-error/examples/getFullStack.js:5:12)
   at Module._compile (module.js:409:26)
   at Object.Module._extensions..js (module.js:416:10)
   at Module.load (module.js:343:32)
@@ -395,7 +395,7 @@ ChainError: something really bad happened here: something bad happened
   at startup (node.js:139:18)
   at node.js:968:3
 caused by: ChainError: something bad happened
-  at Object.<anonymous> (/home/dap/node-chain-error/examples/fullStack.js:3:12)
+  at Object.<anonymous> (/home/dap/node-chain-error/examples/getFullStack.js:3:12)
   at Module._compile (module.js:409:26)
   at Object.Module._extensions..js (module.js:416:10)
   at Module.load (module.js:343:32)
@@ -405,6 +405,6 @@ caused by: ChainError: something bad happened
   at node.js:968:3
 ```
 
-`ChainError.fullStack` is also safe to use on regular `Error`s, so feel free to use
+`ChainError.getFullStack(err)` is also safe to use on regular `Error`s, so feel free to use
 it whenever you need to extract the stack trace from an `Error`, regardless if
 it's a `ChainError` or not.
