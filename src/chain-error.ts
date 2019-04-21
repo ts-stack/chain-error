@@ -21,7 +21,7 @@ export class ChainError extends Error {
    * this Error particularly) separately from the concatenated message (which
    * includes the messages of our cause chain).
    */
-  protected currentMsg: string;
+  protected currentMessage: string;
 
   constructor(message?: string, optsOrError?: ChainErrorOptions | Error, skipCauseMessage?: boolean) {
     super();
@@ -50,17 +50,15 @@ export class ChainError extends Error {
       this.name = options.name;
     }
 
-    this.message = this.currentMsg = message;
+    this.message = this.currentMessage = message;
 
     /**
      * If we've been given a cause, record a reference to it and update our
      * message appropriately.
      */
     this.cause = options.cause;
-    if (this.cause) {
-      if (!skipCauseMessage) {
-        this.message += ': ' + this.cause.message;
-      }
+    if (this.cause && !skipCauseMessage) {
+      this.message += ': ' + this.cause.message;
     }
 
     /**
