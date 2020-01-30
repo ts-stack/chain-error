@@ -6,5 +6,8 @@
  */
 export function cleanStack(stacktxt: string) {
   const re = new RegExp('\\(/.*/*.spec.js:\\d+:\\d+\\)', 'gm');
-  return stacktxt.replace(re, '(dummy filename)').replace(/UserContext.fit /gm, 'UserContext.it ');
+  return stacktxt
+    .replace(re, '(dummy filename)')
+    .replace(/UserContext.fit /gm, 'UserContext.it ')
+    .replace(/UserContext.<anonymous> /gm, 'UserContext.it ');
 }

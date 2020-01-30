@@ -9,8 +9,8 @@
 	"license": "MIT",
 	"scripts": {
 		"test": "npm run rm-dists && tsc --project test && jasmine",
-		"rm-dists": "rimraf dist && rimraf dist-test",
-		"build": "rimraf dist && tsc",
+		"rm-dists": "rimraf dist/* && rimraf dist-test/*",
+		"build": "rimraf dist/* && tsc",
 		"tslint": "tslint --project ./tsconfig.json '{src}/**/*.ts' --fix"
 	},
 	"dependencies": {
