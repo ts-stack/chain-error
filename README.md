@@ -24,14 +24,14 @@ for logging and debugging.
 First, install the package:
 
 ```bash
-npm install @restify-ts/chain-error
+npm install @ts-stack/chain-error
 ```
 
 If nothing else, you can use `ChainError` as a drop-in replacement for the built-in
 JavaScript `Error` class:
 
 ```ts
-import { ChainError } from '@restify-ts/chain-error';
+import { ChainError } from '@ts-stack/chain-error';
 
 const path = '/etc/passw';
 const err = new ChainError(`missing file: "${path}"`);
