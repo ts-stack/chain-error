@@ -16,6 +16,7 @@ describe(`Common functionality for ChainError:`, () => {
      */
     Error.stackTraceLimit = 20;
     nodestack = new Error().stack.split('\n').slice(4).join('\n');
+    nodestack = cleanStack(nodestack);
   });
 
   it('No arguments', () => {
@@ -25,7 +26,7 @@ describe(`Common functionality for ChainError:`, () => {
     expect(err.message).toBe('');
     actualStack = cleanStack(err.stack);
 
-    const expectedStack = `ChainError\n    (dummy filename)\n${nodestack}`;
+    const expectedStack = `ChainError: \n    (dummy filename)\n${nodestack}`;
     expect(actualStack).toBe(expectedStack);
   });
 

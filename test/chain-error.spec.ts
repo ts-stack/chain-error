@@ -15,6 +15,7 @@ describe('ChainError:', () => {
      */
     Error.stackTraceLimit = 20;
     nodestack = new Error().stack.split('\n').slice(4).join('\n');
+    nodestack = cleanStack(nodestack);
   });
 
   it('caused by another error, with no additional message', () => {
@@ -66,7 +67,7 @@ describe('ChainError:', () => {
     const err = new ChainError(null, null, true);
     expect(err.toString()).toEqual('ChainError');
     const stack = cleanStack(err.stack);
-    expect(stack).toEqual(`ChainError\n    (dummy filename)\n${nodestack}`);
+    expect(stack).toEqual(`ChainError: \n    (dummy filename)\n${nodestack}`);
   });
 
   it('options-argument form', () => {

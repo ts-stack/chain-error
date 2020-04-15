@@ -6,9 +6,8 @@
  */
 export function cleanStack(stacktxt: string) {
   return stacktxt
-    .replace(/ +at Object.asyncJest[^\n]+\n/gm, '')
-    .replace(/ +at Object.<anonymous>[^\n]+\n/gm, '')
-    .replace(/at \/[^\n]+queueRunner[^\n]+/g, '(dummy filename)')
-    .replace(/at \([^\n]+queueRunner[^\n]+\)/g, '(dummy filename)')
-    .replace(/\([^\n]+spec.ts:\d+:\d+\)/, '(dummy filename)');
+    .replace(/ +at Object.asyncJest[^\n]+\n/g, '')
+    .replace(/ +at Object.<anonymous>[^\n]+.spec.ts:\d[^\n]+\n/g, '')
+    .replace(/at \/[^\n]+jest-jasmine[^\n]+/g, '(dummy filename)')
+    .replace(/\([^\n]+.spec.ts[^\n]+\)/g, '(dummy filename)');
 }

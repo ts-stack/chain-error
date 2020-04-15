@@ -32,6 +32,7 @@ describe('Test that inheriting from ChainError work as expected:', () => {
      */
     Error.stackTraceLimit = 20;
     nodestack = new Error().stack.split('\n').slice(4).join('\n');
+    nodestack = cleanStack(nodestack);
   });
 
   it('Root cause', () => {
