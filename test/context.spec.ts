@@ -8,12 +8,12 @@ describe('Cause works with errors:', () => {
     err = new Error();
   });
 
-  it('from different contexts', done => {
+  it('from different contexts', (done) => {
     const context = vm.createContext({
       callback: function callback(err2: Error) {
         expect(types.isNativeError(err2)).toBeTruthy();
         done();
-      }
+      },
     });
 
     vm.runInContext('callback(new Error())', context);

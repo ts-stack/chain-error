@@ -31,10 +31,7 @@ describe('Test that inheriting from ChainError work as expected:', () => {
      * which are more than the default (10 frames) in Node v6.x.
      */
     Error.stackTraceLimit = 20;
-    nodestack = new Error().stack
-      .split('\n')
-      .slice(2)
-      .join('\n');
+    nodestack = new Error().stack.split('\n').slice(2).join('\n');
   });
 
   it('Root cause', () => {

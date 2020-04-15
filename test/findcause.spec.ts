@@ -33,7 +33,7 @@ describe('findCauseByName()/hasCauseWithName():', () => {
       'skipCauseMessage (number four)',
       {
         name: 'ErrorFour',
-        cause: err3
+        cause: err3,
       },
       true
     );

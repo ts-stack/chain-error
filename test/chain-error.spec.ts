@@ -14,10 +14,7 @@ describe('ChainError:', () => {
      * which are more than the default (10 frames) in Node v6.x.
      */
     Error.stackTraceLimit = 20;
-    nodestack = new Error().stack
-      .split('\n')
-      .slice(2)
-      .join('\n');
+    nodestack = new Error().stack.split('\n').slice(2).join('\n');
   });
 
   it('"null" or "undefined" as string', () => {

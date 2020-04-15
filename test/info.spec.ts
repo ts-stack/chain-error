@@ -18,13 +18,13 @@ describe('Tests the way informational properties are inherited with nested error
       name: 'MyError',
       info: {
         errno: 'EDEADLK',
-        anobject: { hello: 'world' }
-      }
+        anobject: { hello: 'world' },
+      },
     });
     expect(err1.name).toEqual('MyError');
     assert.deepStrictEqual(ChainError.getInfo(err1), {
       errno: 'EDEADLK',
-      anobject: { hello: 'world' }
+      anobject: { hello: 'world' },
     });
   });
 
@@ -33,7 +33,7 @@ describe('Tests the way informational properties are inherited with nested error
     expect(err2.message).toEqual('worse: bad');
     assert.deepStrictEqual(ChainError.getInfo(err2), {
       errno: 'EDEADLK',
-      anobject: { hello: 'world' }
+      anobject: { hello: 'world' },
     });
   });
 
@@ -41,13 +41,13 @@ describe('Tests the way informational properties are inherited with nested error
     err2 = new ChainError('worse', {
       cause: err1,
       info: {
-        anobject: { hello: 'moon' }
-      }
+        anobject: { hello: 'moon' },
+      },
     });
     expect(err2.message).toEqual('worse: bad');
     assert.deepStrictEqual(ChainError.getInfo(err2), {
       errno: 'EDEADLK',
-      anobject: { hello: 'moon' }
+      anobject: { hello: 'moon' },
     });
   });
 
@@ -56,8 +56,8 @@ describe('Tests the way informational properties are inherited with nested error
       cause: err2,
       name: 'BigError',
       info: {
-        remote_ip: '127.0.0.1'
-      }
+        remote_ip: '127.0.0.1',
+      },
     });
     expect(err3.name).toEqual('BigError');
     expect(ChainError.getInfo(err3).remote_ip).toEqual('127.0.0.1');
