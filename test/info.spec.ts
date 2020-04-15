@@ -3,9 +3,9 @@ import * as assert from 'assert';
 import { ChainError } from '../src/chain-error';
 
 describe('Tests the way informational properties are inherited with nested errors:', () => {
-  let err1;
-  let err2;
-  let err3;
+  let err1: Error;
+  let err2: Error;
+  let err3: Error;
   it('base case using "options" to specify cause', () => {
     err1 = new Error('bad');
     err2 = new ChainError('worse', { cause: err1 });

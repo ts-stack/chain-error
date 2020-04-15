@@ -14,7 +14,7 @@ describe('ChainError:', () => {
      * which are more than the default (10 frames) in Node v6.x.
      */
     Error.stackTraceLimit = 20;
-    nodestack = new Error().stack.split('\n').slice(2).join('\n');
+    nodestack = new Error().stack.split('\n').slice(4).join('\n');
   });
 
   it('caused by another error, with no additional message', () => {
@@ -31,7 +31,7 @@ describe('ChainError:', () => {
     const err = new ChainError(`proximate cause: 3 issues`, suberr);
     expect(err.message).toEqual('proximate cause: 3 issues: root cause');
     const actualStack = cleanStack(err.stack);
-    const expectedStack = `ChainError: proximate cause: 3 issues: root cause\n    at UserContext.it (dummy filename)\n${nodestack}`;
+    const expectedStack = `ChainError: proximate cause: 3 issues: root cause\n    (dummy filename)\n${nodestack}`;
     expect(actualStack).toBe(expectedStack);
   });
 
@@ -56,9 +56,9 @@ describe('ChainError:', () => {
     const err = new ChainError('top', suberr);
     const actualStack = cleanStack(ChainError.getFullStack(err));
     expect(actualStack).toBe(
-      `ChainError: top: mid: root cause\n    at UserContext.it (dummy filename)\n${nodestack}\n` +
-        `caused by: ChainError: mid: root cause\n    at UserContext.it (dummy filename)\n${nodestack}\n` +
-        `caused by: Error: root cause\n    at UserContext.it (dummy filename)\n${nodestack}`
+      `ChainError: top: mid: root cause\n    (dummy filename)\n${nodestack}\n` +
+        `caused by: ChainError: mid: root cause\n    (dummy filename)\n${nodestack}\n` +
+        `caused by: Error: root cause\n    (dummy filename)\n${nodestack}`
     );
   });
 
@@ -66,7 +66,7 @@ describe('ChainError:', () => {
     const err = new ChainError(null, null, true);
     expect(err.toString()).toEqual('ChainError');
     const stack = cleanStack(err.stack);
-    expect(stack).toEqual(`ChainError\n    at UserContext.it (dummy filename)\n${nodestack}`);
+    expect(stack).toEqual(`ChainError\n    (dummy filename)\n${nodestack}`);
   });
 
   it('options-argument form', () => {
@@ -78,7 +78,7 @@ describe('ChainError:', () => {
     expect(err.message).toEqual('my error');
     expect(err.toString()).toEqual('ChainError: my error');
     const stack = cleanStack(err.stack);
-    expect(stack).toEqual(`ChainError: my error\n    at UserContext.it (dummy filename)\n${nodestack}`);
+    expect(stack).toEqual(`ChainError: my error\n    (dummy filename)\n${nodestack}`);
 
     err = new ChainError('my error', {}, true);
     expect(err.toString()).toEqual('ChainError: my error');
@@ -101,17 +101,13 @@ describe('ChainError:', () => {
     expect(err.message).toEqual('proximate cause: 3 issues');
     expect(err.toString()).toEqual('ChainError: proximate cause: 3 issues; caused by Error: root cause');
     let stack = cleanStack(err.stack);
-    expect(stack).toEqual(
-      `ChainError: proximate cause: 3 issues\n    at UserContext.it (dummy filename)\n${nodestack}`
-    );
+    expect(stack).toEqual(`ChainError: proximate cause: 3 issues\n    (dummy filename)\n${nodestack}`);
 
     err = new ChainError(`proximate cause: 3 issues`, { cause: suberr }, true);
     expect(err.message).toEqual('proximate cause: 3 issues');
     expect(err.toString()).toEqual('ChainError: proximate cause: 3 issues; caused by Error: root cause');
     stack = cleanStack(err.stack);
-    expect(stack).toEqual(
-      `ChainError: proximate cause: 3 issues\n    at UserContext.it (dummy filename)\n${nodestack}`
-    );
+    expect(stack).toEqual(`ChainError: proximate cause: 3 issues\n    (dummy filename)\n${nodestack}`);
   });
 
   it('caused by another ChainError, with annotation', () => {
@@ -144,9 +140,9 @@ describe('ChainError:', () => {
     const stack = cleanStack(ChainError.getFullStack(err));
 
     expect(stack).toBe(
-      `ChainError: top\n    at UserContext.it (dummy filename)\n${nodestack}\n` +
-        `caused by: ChainError: mid\n    at UserContext.it (dummy filename)\n${nodestack}\n` +
-        `caused by: Error: root cause\n    at UserContext.it (dummy filename)\n${nodestack}`
+      `ChainError: top\n    (dummy filename)\n${nodestack}\n` +
+        `caused by: ChainError: mid\n    (dummy filename)\n${nodestack}\n` +
+        `caused by: Error: root cause\n    (dummy filename)\n${nodestack}`
     );
   });
 });

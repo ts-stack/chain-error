@@ -5,9 +5,10 @@
  * Common utility functions used in multiple tests.
  */
 export function cleanStack(stacktxt: string) {
-  const re = new RegExp('\\(/.*/*.spec.js:\\d+:\\d+\\)', 'gm');
   return stacktxt
-    .replace(re, '(dummy filename)')
-    .replace(/UserContext.fit /gm, 'UserContext.it ')
-    .replace(/UserContext.<anonymous> /gm, 'UserContext.it ');
+    .replace(/ +at Object.asyncJest[^\n]+\n/gm, '')
+    .replace(/ +at Object.<anonymous>[^\n]+\n/gm, '')
+    .replace(/at \/[^\n]+queueRunner[^\n]+/g, '(dummy filename)')
+    .replace(/at \([^\n]+queueRunner[^\n]+\)/g, '(dummy filename)')
+    .replace(/\([^\n]+spec.ts:\d+:\d+\)/, '(dummy filename)');
 }

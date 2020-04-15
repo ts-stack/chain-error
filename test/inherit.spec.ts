@@ -1,6 +1,6 @@
 import { ChainError } from '../src/chain-error';
-import * as testcommon from './common';
-import { ChainErrorOptions } from '../src';
+import { cleanStack } from './common';
+import { ChainErrorOptions } from '../src/types';
 
 // tslint:disable:max-classes-per-file
 describe('Test that inheriting from ChainError work as expected:', () => {
@@ -31,7 +31,7 @@ describe('Test that inheriting from ChainError work as expected:', () => {
      * which are more than the default (10 frames) in Node v6.x.
      */
     Error.stackTraceLimit = 20;
-    nodestack = new Error().stack.split('\n').slice(2).join('\n');
+    nodestack = new Error().stack.split('\n').slice(4).join('\n');
   });
 
   it('Root cause', () => {
@@ -42,10 +42,8 @@ describe('Test that inheriting from ChainError work as expected:', () => {
     expect(err instanceof ChainErrorChild).toBeTruthy();
     expect(err.message).toEqual('top: root cause');
     expect(err.toString()).toEqual('ChainErrorChild: top: root cause');
-    stack = testcommon.cleanStack(err.stack);
-    expect(stack).toEqual(
-      ['ChainErrorChild: top: root cause', '    at UserContext.it (dummy filename)', nodestack].join('\n')
-    );
+    stack = cleanStack(err.stack);
+    expect(stack).toEqual(['ChainErrorChild: top: root cause', '    (dummy filename)', nodestack].join('\n'));
 
     suberr = new Error('root cause');
     err = new WErrorChild('top', suberr, true);
@@ -54,9 +52,9 @@ describe('Test that inheriting from ChainError work as expected:', () => {
     expect(err instanceof WErrorChild).toBeTruthy();
     expect(err.message).toEqual('top');
     expect(err.toString()).toEqual('WErrorChild: top; caused by Error: root cause');
-    stack = testcommon.cleanStack(err.stack);
+    stack = cleanStack(err.stack);
 
-    expect(stack).toEqual(['WErrorChild: top', '    at UserContext.it (dummy filename)', nodestack].join('\n'));
+    expect(stack).toEqual(['WErrorChild: top', '    (dummy filename)', nodestack].join('\n'));
   });
 
   it('"<Ctor>.toString()" uses the constructor name', () => {
@@ -82,7 +80,7 @@ describe('Test that inheriting from ChainError work as expected:', () => {
      */
     class ChainErrorChildAnon extends ChainError {
       name = 'ChainErrorChildAnon';
-      constructor(arg1) {
+      constructor(arg1: any) {
         super(arg1);
       }
     }
