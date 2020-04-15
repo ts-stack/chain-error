@@ -17,13 +17,6 @@ describe('ChainError:', () => {
     nodestack = new Error().stack.split('\n').slice(2).join('\n');
   });
 
-  it('"null" or "undefined" as string', () => {
-    let err = new ChainError(`my ${null} string`);
-    expect(err.message).toEqual('my null string');
-    err = new ChainError(`my ${undefined} string`);
-    expect(err.message).toEqual('my undefined string');
-  });
-
   it('caused by another error, with no additional message', () => {
     const suberr = new Error('root cause');
     let err = new ChainError(null, suberr);
@@ -34,9 +27,8 @@ describe('ChainError:', () => {
   });
 
   it('caused by another error, with annotation', () => {
-    const num = 3;
     const suberr = new Error('root cause');
-    const err = new ChainError(`proximate cause: ${num} issues`, suberr);
+    const err = new ChainError(`proximate cause: 3 issues`, suberr);
     expect(err.message).toEqual('proximate cause: 3 issues: root cause');
     const actualStack = cleanStack(err.stack);
     const expectedStack = `ChainError: proximate cause: 3 issues: root cause\n    at UserContext.it (dummy filename)\n${nodestack}`;
@@ -44,9 +36,8 @@ describe('ChainError:', () => {
   });
 
   it('caused by another ChainError, with annotation', () => {
-    const num = 3;
     const suberr1 = new Error('root cause');
-    const suberr2 = new ChainError(`proximate cause: ${num} issues`, suberr1);
+    const suberr2 = new ChainError(`proximate cause: 3 issues`, suberr1);
     let err = new ChainError('top', suberr2);
     expect(err.message).toEqual('top: proximate cause: 3 issues: root cause');
 
@@ -106,17 +97,17 @@ describe('ChainError:', () => {
 
   it('caused by another error, with annotation', () => {
     const suberr = new Error('root cause');
-    let err = new ChainError(`proximate cause: ${3} issues`, suberr, true);
+    let err = new ChainError(`proximate cause: 3 issues`, suberr, true);
     expect(err.message).toEqual('proximate cause: 3 issues');
-    expect(err.toString()).toEqual('ChainError: proximate cause: 3 issues; ' + 'caused by Error: root cause');
+    expect(err.toString()).toEqual('ChainError: proximate cause: 3 issues; caused by Error: root cause');
     let stack = cleanStack(err.stack);
     expect(stack).toEqual(
       `ChainError: proximate cause: 3 issues\n    at UserContext.it (dummy filename)\n${nodestack}`
     );
 
-    err = new ChainError(`proximate cause: ${3} issues`, { cause: suberr }, true);
+    err = new ChainError(`proximate cause: 3 issues`, { cause: suberr }, true);
     expect(err.message).toEqual('proximate cause: 3 issues');
-    expect(err.toString()).toEqual('ChainError: proximate cause: 3 issues; ' + 'caused by Error: root cause');
+    expect(err.toString()).toEqual('ChainError: proximate cause: 3 issues; caused by Error: root cause');
     stack = cleanStack(err.stack);
     expect(stack).toEqual(
       `ChainError: proximate cause: 3 issues\n    at UserContext.it (dummy filename)\n${nodestack}`
@@ -125,7 +116,7 @@ describe('ChainError:', () => {
 
   it('caused by another ChainError, with annotation', () => {
     const suberr1 = new Error('root cause');
-    const suberr = new ChainError(`proximate cause: ${3} issues`, { cause: suberr1 }, true);
+    const suberr = new ChainError(`proximate cause: 3 issues`, { cause: suberr1 }, true);
     let err = new ChainError('top', suberr, true);
     expect(err.message).toEqual('top');
     let actualStack = err.toString();
