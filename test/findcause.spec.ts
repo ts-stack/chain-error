@@ -51,36 +51,36 @@ describe('findCauseByName()/hasCauseWithName():', () => {
   });
 
   it('next-level errors should have only their own causes', () => {
-    expect(null).toEqual(findCauseByName(err3, 'ErrorFour'));
-    expect(false).toEqual(hasCauseWithName(err3, 'ErrorFour'));
-    expect(err3).toEqual(findCauseByName(err3, 'ErrorThree'));
-    expect(true).toEqual(hasCauseWithName(err3, 'ErrorThree'));
-    expect(err2).toEqual(findCauseByName(err3, 'ErrorTwo'));
-    expect(true).toEqual(hasCauseWithName(err3, 'ErrorTwo'));
-    expect(err1).toEqual(findCauseByName(err3, 'MyError'));
-    expect(true).toEqual(hasCauseWithName(err3, 'MyError'));
+    expect(findCauseByName(err3, 'ErrorFour')).toBe(null);
+    expect(hasCauseWithName(err3, 'ErrorFour')).toBe(false);
+    expect(findCauseByName(err3, 'ErrorThree')).toEqual(err3);
+    expect(hasCauseWithName(err3, 'ErrorThree')).toBe(true);
+    expect(findCauseByName(err3, 'ErrorTwo')).toEqual(err2);
+    expect(hasCauseWithName(err3, 'ErrorTwo')).toBe(true);
+    expect(findCauseByName(err3, 'MyError')).toEqual(err1);
+    expect(hasCauseWithName(err3, 'MyError')).toBe(true);
 
-    expect(null).toEqual(findCauseByName(err2, 'ErrorFour'));
-    expect(false).toEqual(hasCauseWithName(err2, 'ErrorFour'));
-    expect(null).toEqual(findCauseByName(err2, 'ErrorThree'));
-    expect(false).toEqual(hasCauseWithName(err2, 'ErrorThree'));
-    expect(err2).toEqual(findCauseByName(err2, 'ErrorTwo'));
-    expect(true).toEqual(hasCauseWithName(err2, 'ErrorTwo'));
-    expect(err1).toEqual(findCauseByName(err2, 'MyError'));
-    expect(true).toEqual(hasCauseWithName(err2, 'MyError'));
+    expect(findCauseByName(err2, 'ErrorFour')).toBe(null);
+    expect(hasCauseWithName(err2, 'ErrorFour')).toBe(false);
+    expect(findCauseByName(err2, 'ErrorThree')).toBe(null);
+    expect(hasCauseWithName(err2, 'ErrorThree')).toBe(false);
+    expect(findCauseByName(err2, 'ErrorTwo')).toEqual(err2);
+    expect(hasCauseWithName(err2, 'ErrorTwo')).toBe(true);
+    expect(findCauseByName(err2, 'MyError')).toEqual(err1);
+    expect(hasCauseWithName(err2, 'MyError')).toBe(true);
   });
 
   it('must work on non-ChainError errors', () => {
-    expect(err1).toEqual(findCauseByName(err1, 'MyError'));
-    expect(true).toEqual(hasCauseWithName(err1, 'MyError'));
-    expect(null).toEqual(findCauseByName(err1, 'ErrorTwo'));
-    expect(false).toEqual(hasCauseWithName(err1, 'ErrorTwo'));
+    expect(findCauseByName(err1, 'MyError')).toEqual(err1);
+    expect(hasCauseWithName(err1, 'MyError')).toBe(true);
+    expect(findCauseByName(err1, 'ErrorTwo')).toBe(null);
+    expect(hasCauseWithName(err1, 'ErrorTwo')).toBe(false);
 
     err1 = new Error('a very basic error');
-    expect(err1).toEqual(findCauseByName(err1, 'Error'));
-    expect(true).toEqual(hasCauseWithName(err1, 'Error'));
-    expect(null).toEqual(findCauseByName(err1, 'MyError'));
-    expect(false).toEqual(hasCauseWithName(err1, 'MyError'));
+    expect(findCauseByName(err1, 'Error')).toEqual(err1);
+    expect(hasCauseWithName(err1, 'Error')).toBe(true);
+    expect(findCauseByName(err1, 'MyError')).toBe(null);
+    expect(hasCauseWithName(err1, 'MyError')).toBe(false);
   });
 
   it('should throw an Error when given bad argument types', () => {
