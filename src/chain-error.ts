@@ -4,24 +4,24 @@ import { types } from 'util';
 import { ChainErrorOptions, ObjectAny } from './types';
 
 export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
-  protected skipCauseMessage: boolean;
+  readonly skipCauseMessage: boolean;
   /**
    * Indicates that the new error was caused by `cause`. See `getCause()` below.
    * If unspecified, the cause will be `null`.
    */
-  protected cause: Error;
+  readonly cause: Error;
   /**
    * Specifies arbitrary informational properties that
    * are available through the `ChainError.getInfo(err)` static class method.
    * See that method for details.
    */
-  protected info: T;
+  readonly info: T;
   /**
    * For debugging, we keep track of the original message (attached
    * this Error particularly) separately from the concatenated message (which
    * includes the messages of our cause chain).
    */
-  protected currentMessage: string;
+  readonly currentMessage: string;
 
   constructor(message?: string, optsOrError?: ChainErrorOptions<T> | Error, skipCauseMessage?: boolean) {
     super();
@@ -103,9 +103,9 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
    * generally be plain objects (i.e., consisting only of `null`, `undefined`, `numbers`,
    * `booleans`, `strings`, `objects` and arrays containing only other plain objects).
    */
-  static getInfo(error: Error): ObjectAny {
+  static getInfo<T extends ObjectAny = ObjectAny>(error: Error): T {
     const err = error as ChainError;
-    let info: ObjectAny = {};
+    let info = {} as T;
     let cause: Error;
 
     cause = this.getCause(err);
