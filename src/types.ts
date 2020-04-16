@@ -2,7 +2,7 @@ export interface ObjectAny {
   [key: string]: any;
 }
 
-export interface ChainErrorOptions {
+export interface ChainErrorOptions<T extends ObjectAny = ObjectAny> {
   /**
    * Describes what kind of error this is. This is intended for programmatic use
    * to distinguish between different kinds of errors. Note that in modern versions of Node.js,
@@ -26,5 +26,5 @@ export interface ChainErrorOptions {
    * are available through the `ChainError.getInfo(err)` static class method.
    * See that method for details.
    */
-  info?: ObjectAny;
+  info?: T;
 }

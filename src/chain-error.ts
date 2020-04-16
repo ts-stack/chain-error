@@ -3,7 +3,7 @@ import { types } from 'util';
 
 import { ChainErrorOptions, ObjectAny } from './types';
 
-export class ChainError extends Error {
+export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
   protected skipCauseMessage: boolean;
   /**
    * Indicates that the new error was caused by `cause`. See `getCause()` below.
@@ -15,7 +15,7 @@ export class ChainError extends Error {
    * are available through the `ChainError.getInfo(err)` static class method.
    * See that method for details.
    */
-  protected info: ObjectAny;
+  protected info: T;
   /**
    * For debugging, we keep track of the original message (attached
    * this Error particularly) separately from the concatenated message (which
@@ -23,12 +23,12 @@ export class ChainError extends Error {
    */
   protected currentMessage: string;
 
-  constructor(message?: string, optsOrError?: ChainErrorOptions | Error, skipCauseMessage?: boolean) {
+  constructor(message?: string, optsOrError?: ChainErrorOptions<T> | Error, skipCauseMessage?: boolean) {
     super();
 
     this.skipCauseMessage = skipCauseMessage;
 
-    const options = {} as ChainErrorOptions;
+    const options = {} as ChainErrorOptions<T>;
     message = message || '';
     assert.string(message, 'message must be a string');
 
@@ -67,7 +67,7 @@ export class ChainError extends Error {
      * objects here, but we don't want to use the original object in case
      * the caller modifies it later.
      */
-    this.info = {};
+    this.info = {} as T;
     if (options.info) {
       Object.assign(this.info, options.info);
     }
