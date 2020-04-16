@@ -8,7 +8,7 @@
 	"homepage": "https://github.com/ts-stack/chain-error",
 	"license": "MIT",
 	"scripts": {
-		"test": "npm run rm-dists && tsc --project test && jest",
+		"test": "jest --no-cache",
 		"rm-dists": "rimraf dist/* && rimraf dist-test/*",
 		"build": "rimraf dist/* && tsc",
 		"tslint": "tslint --project ./tsconfig.json '{src}/**/*.ts' --fix"
