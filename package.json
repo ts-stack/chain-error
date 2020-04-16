@@ -1,6 +1,6 @@
 {
 	"name": "@ts-stack/chain-error",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Richer JavaScript errors",
 	"main": "dist/index",
 	"typings": "dist/index",
@@ -28,6 +28,6 @@
 		"tslint": "^6.1.1",
 		"tslint-config-prettier": "^1.15.0",
 		"tslint-plugin-prettier": "^2.0.1",
-		"typescript": "^3.1.6"
+		"typescript": "^3.8.3"
 	}
 }
