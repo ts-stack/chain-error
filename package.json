@@ -13,6 +13,9 @@
 		"build": "rimraf dist/* && tsc",
 		"tslint": "tslint --project ./tsconfig.json '{src}/**/*.ts' --fix"
 	},
+	"resolutions": {
+		"node-notifier": "^8.0.1"
+	},
 	"dependencies": {
 		"assert-plus": "^1.0.0"
 	},
