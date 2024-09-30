@@ -9,7 +9,7 @@ describe('Tests the way informational properties are inherited with nested error
   it('base case using "options" to specify cause', () => {
     err1 = new Error('bad');
     err2 = new ChainError('worse', { cause: err1 });
-    expect(err2.message).toEqual('worse: bad');
+    expect(err2.message).toBe('worse: bad');
     assert.deepStrictEqual(ChainError.getInfo(err2), {});
   });
 
@@ -21,7 +21,7 @@ describe('Tests the way informational properties are inherited with nested error
         anobject: { hello: 'world' },
       },
     });
-    expect(err1.name).toEqual('MyError');
+    expect(err1.name).toBe('MyError');
     assert.deepStrictEqual(ChainError.getInfo(err1), {
       errno: 'EDEADLK',
       anobject: { hello: 'world' },
@@ -30,7 +30,7 @@ describe('Tests the way informational properties are inherited with nested error
 
   it('simple property propagation using old syntax', () => {
     err2 = new ChainError('worse', err1);
-    expect(err2.message).toEqual('worse: bad');
+    expect(err2.message).toBe('worse: bad');
     assert.deepStrictEqual(ChainError.getInfo(err2), {
       errno: 'EDEADLK',
       anobject: { hello: 'world' },
@@ -44,7 +44,7 @@ describe('Tests the way informational properties are inherited with nested error
         anobject: { hello: 'moon' },
       },
     });
-    expect(err2.message).toEqual('worse: bad');
+    expect(err2.message).toBe('worse: bad');
     assert.deepStrictEqual(ChainError.getInfo(err2), {
       errno: 'EDEADLK',
       anobject: { hello: 'moon' },
@@ -59,10 +59,10 @@ describe('Tests the way informational properties are inherited with nested error
         remote_ip: '127.0.0.1',
       },
     });
-    expect(err3.name).toEqual('BigError');
-    expect(ChainError.getInfo(err3).remote_ip).toEqual('127.0.0.1');
-    expect(err3.message).toEqual('what next: worse: bad');
-    expect(ChainError.getInfo(err3).errno).toEqual('EDEADLK');
+    expect(err3.name).toBe('BigError');
+    expect(ChainError.getInfo(err3).remote_ip).toBe('127.0.0.1');
+    expect(err3.message).toBe('what next: worse: bad');
+    expect(ChainError.getInfo(err3).errno).toBe('EDEADLK');
     assert.deepStrictEqual(ChainError.getInfo(err3).anobject, { hello: 'moon' });
   });
 });
