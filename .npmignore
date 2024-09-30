@@ -4,3 +4,9 @@ dist-test
 spec
 .prettierrc
 *.tgz
+tsconfig.test.json
+tsconfig.build.json
+eslint.config.mjs
+jest.config.ts
+yarn.lock
+.vscode
