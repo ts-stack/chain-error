@@ -1,15 +1,15 @@
-import * as assert from 'assert-plus';
+import assert from 'assert-plus';
 import { types } from 'util';
 
-import { ChainErrorOptions, ObjectAny } from './types';
+import { ChainErrorOptions, ObjectAny } from './types.js';
 
 export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
-  readonly skipCauseMessage: boolean;
+  readonly skipCauseMessage?: boolean;
   /**
    * Indicates that the new error was caused by `cause`. See `getCause()` below.
    * If unspecified, the cause will be `null`.
    */
-  readonly cause: Error;
+  override readonly cause?: Error;
   /**
    * Specifies arbitrary informational properties that
    * are available through the `ChainError.getInfo(err)` static class method.
@@ -23,7 +23,7 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
    */
   readonly currentMessage: string;
 
-  constructor(message?: string, optsOrError?: ChainErrorOptions<T> | Error, skipCauseMessage?: boolean) {
+  constructor(message?: string | null, optsOrError?: ChainErrorOptions<T> | Error | null, skipCauseMessage?: boolean) {
     super();
 
     this.skipCauseMessage = skipCauseMessage;
@@ -85,7 +85,7 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
    * You can walk the `cause` chain by invoking `ChainError.getCause(err)`
    * on each subsequent return value.
    */
-  static getCause(err: Error): Error | null {
+  static getCause(err: Error): Error | null | undefined {
     assert.ok(types.isNativeError(err), 'err must be an Error');
     return types.isNativeError((err as ChainError).cause) ? (err as ChainError).cause : null;
   }
@@ -106,10 +106,9 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
   static getInfo<T extends ObjectAny = ObjectAny>(error: Error): T {
     const err = error as ChainError;
     let info = {} as T;
-    let cause: Error;
 
-    cause = this.getCause(err);
-    if (cause !== null) {
+    const cause = this.getCause(err);
+    if (cause) {
       info = this.getInfo(cause);
     }
 
@@ -137,7 +136,7 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
     assert.string(name, 'name');
     assert.ok(name.length > 0, 'name cannot be empty');
 
-    for (let cause = err; cause !== null; cause = this.getCause(cause)) {
+    for (let cause: Error | null | undefined = err; cause; cause = this.getCause(cause)) {
       if (cause.name == name) {
         return cause;
       }
@@ -159,7 +158,7 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
    * Returns a string containing the full stack trace, with all nested errors recursively
    * reported as `'caused by:' + err.stack`.
    */
-  static getFullStack(err: Error): string {
+  static getFullStack(err: Error): string | undefined {
     const cause = this.getCause(err);
     if (cause) {
       return err.stack + '\ncaused by: ' + this.getFullStack(cause);
@@ -168,7 +167,7 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
     return err.stack;
   }
 
-  toString() {
+  override toString() {
     let str = (this.hasOwnProperty('name') && this.name) || this.constructor.name || this.constructor.prototype.name;
     if (this.message) {
       str += ': ' + this.message;

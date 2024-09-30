@@ -1,2 +1,2 @@
-export * from './chain-error';
-export { ChainErrorOptions } from './types';
+export * from './chain-error.js';
+export { ChainErrorOptions } from './types.js';
