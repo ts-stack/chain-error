@@ -1,5 +1,5 @@
-import { ChainError } from '../src/chain-error';
-import { cleanStack } from './common';
+import { ChainError } from '#lib/chain-error.js';
+import { cleanStack } from './common.js';
 
 // tslint:disable: no-unused-expression
 
@@ -14,7 +14,7 @@ describe('ChainError:', () => {
      * which are more than the default (10 frames) in Node v6.x.
      */
     Error.stackTraceLimit = 20;
-    nodestack = new Error().stack.split('\n').slice(4).join('\n');
+    nodestack = new Error().stack!.split('\n').slice(4).join('\n');
     nodestack = cleanStack(nodestack);
   });
 
@@ -29,16 +29,16 @@ describe('ChainError:', () => {
 
   it('caused by another error, with annotation', () => {
     const suberr = new Error('root cause');
-    const err = new ChainError(`proximate cause: 3 issues`, suberr);
+    const err = new ChainError('proximate cause: 3 issues', suberr);
     expect(err.message).toEqual('proximate cause: 3 issues: root cause');
-    const actualStack = cleanStack(err.stack);
+    const actualStack = cleanStack(err.stack!);
     const expectedStack = `ChainError: proximate cause: 3 issues: root cause\n    (dummy filename)\n${nodestack}`;
     expect(actualStack).toBe(expectedStack);
   });
 
   it('caused by another ChainError, with annotation', () => {
     const suberr1 = new Error('root cause');
-    const suberr2 = new ChainError(`proximate cause: 3 issues`, suberr1);
+    const suberr2 = new ChainError('proximate cause: 3 issues', suberr1);
     let err = new ChainError('top', suberr2);
     expect(err.message).toEqual('top: proximate cause: 3 issues: root cause');
 
@@ -66,7 +66,7 @@ describe('ChainError:', () => {
   it('no arguments', () => {
     const err = new ChainError(null, null, true);
     expect(err.toString()).toEqual('ChainError');
-    const stack = cleanStack(err.stack);
+    const stack = cleanStack(err.stack!);
     expect(stack).toEqual(`ChainError: \n    (dummy filename)\n${nodestack}`);
   });
 
@@ -78,7 +78,7 @@ describe('ChainError:', () => {
     err = new ChainError('my error', null, true);
     expect(err.message).toEqual('my error');
     expect(err.toString()).toEqual('ChainError: my error');
-    const stack = cleanStack(err.stack);
+    const stack = cleanStack(err.stack!);
     expect(stack).toEqual(`ChainError: my error\n    (dummy filename)\n${nodestack}`);
 
     err = new ChainError('my error', {}, true);
@@ -98,22 +98,22 @@ describe('ChainError:', () => {
 
   it('caused by another error, with annotation', () => {
     const suberr = new Error('root cause');
-    let err = new ChainError(`proximate cause: 3 issues`, suberr, true);
+    let err = new ChainError('proximate cause: 3 issues', suberr, true);
     expect(err.message).toEqual('proximate cause: 3 issues');
     expect(err.toString()).toEqual('ChainError: proximate cause: 3 issues; caused by Error: root cause');
-    let stack = cleanStack(err.stack);
+    let stack = cleanStack(err.stack!);
     expect(stack).toEqual(`ChainError: proximate cause: 3 issues\n    (dummy filename)\n${nodestack}`);
 
-    err = new ChainError(`proximate cause: 3 issues`, { cause: suberr }, true);
+    err = new ChainError('proximate cause: 3 issues', { cause: suberr }, true);
     expect(err.message).toEqual('proximate cause: 3 issues');
     expect(err.toString()).toEqual('ChainError: proximate cause: 3 issues; caused by Error: root cause');
-    stack = cleanStack(err.stack);
+    stack = cleanStack(err.stack!);
     expect(stack).toEqual(`ChainError: proximate cause: 3 issues\n    (dummy filename)\n${nodestack}`);
   });
 
   it('caused by another ChainError, with annotation', () => {
     const suberr1 = new Error('root cause');
-    const suberr = new ChainError(`proximate cause: 3 issues`, { cause: suberr1 }, true);
+    const suberr = new ChainError('proximate cause: 3 issues', { cause: suberr1 }, true);
     let err = new ChainError('top', suberr, true);
     expect(err.message).toEqual('top');
     let actualStack = err.toString();

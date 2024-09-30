@@ -1,10 +1,10 @@
-import { ChainError } from '../src/chain-error';
+import { ChainError } from '#lib/chain-error.js';
 
 const findCauseByName = ChainError.findCauseByName.bind(ChainError);
 const hasCauseWithName = ChainError.hasCauseWithName.bind(ChainError);
 
 class MyError extends Error {
-  name = 'MyError';
+  override name = 'MyError';
   /**
    * This class deliberately doesn't inherit from our error classes.
    */
@@ -84,9 +84,9 @@ describe('findCauseByName()/hasCauseWithName():', () => {
   });
 
   it('should throw an Error when given bad argument types', () => {
-    expect(() => findCauseByName(null, 'AnError')).toThrowError(/err must be an Error/);
-    expect(() => hasCauseWithName(null, 'AnError')).toThrowError(/err must be an Error/);
-    expect(() => findCauseByName(err1, null)).toThrowError(/string.*is required/);
-    expect(() => hasCauseWithName(err1, null)).toThrowError(/string.*is required/);
+    expect(() => findCauseByName(null as any, 'AnError')).toThrowError(/err must be an Error/);
+    expect(() => hasCauseWithName(null as any, 'AnError')).toThrowError(/err must be an Error/);
+    expect(() => findCauseByName(err1, null as any)).toThrowError(/string.*is required/);
+    expect(() => hasCauseWithName(err1, null as any)).toThrowError(/string.*is required/);
   });
 });

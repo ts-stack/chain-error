@@ -1,6 +1,6 @@
-import { ChainError } from '../src/chain-error';
-import { cleanStack } from './common';
-import { ChainErrorOptions } from '../src/types';
+import { ChainError } from '#lib/chain-error.js';
+import { ChainErrorOptions } from '#lib/types.js';
+import { cleanStack } from './common.js';
 
 // tslint:disable:max-classes-per-file
 describe('Test that inheriting from ChainError work as expected:', () => {
@@ -10,14 +10,14 @@ describe('Test that inheriting from ChainError work as expected:', () => {
   let nodestack: string;
 
   class ChainErrorChild extends ChainError {
-    name = 'ChainErrorChild';
+    override name = 'ChainErrorChild';
     constructor(message?: string, optsOrError?: ChainErrorOptions | Error, skipCauseMessage?: boolean) {
       super(message, optsOrError, skipCauseMessage);
     }
   }
 
   class WErrorChild extends ChainError {
-    name = 'WErrorChild';
+    override name = 'WErrorChild';
     constructor(message?: string, optsOrError?: ChainErrorOptions | Error, skipCauseMessage?: boolean) {
       super(message, optsOrError, skipCauseMessage);
     }
@@ -31,7 +31,7 @@ describe('Test that inheriting from ChainError work as expected:', () => {
      * which are more than the default (10 frames) in Node v6.x.
      */
     Error.stackTraceLimit = 20;
-    nodestack = new Error().stack.split('\n').slice(4).join('\n');
+    nodestack = new Error().stack!.split('\n').slice(4).join('\n');
     nodestack = cleanStack(nodestack);
   });
 
@@ -80,7 +80,7 @@ describe('Test that inheriting from ChainError work as expected:', () => {
      * when the ctor is anonymous.
      */
     class ChainErrorChildAnon extends ChainError {
-      name = 'ChainErrorChildAnon';
+      override name = 'ChainErrorChildAnon';
       constructor(arg1: any) {
         super(arg1);
       }
@@ -90,8 +90,8 @@ describe('Test that inheriting from ChainError work as expected:', () => {
     expect(err.toString()).toEqual('ChainErrorChildAnon: top');
 
     class WErrorChildAnon extends ChainError {
-      name = 'WErrorChildAnon';
-      constructor(message?: string, optsOrError?: ChainErrorOptions | Error, skipCauseMessage?: boolean) {
+      override name = 'WErrorChildAnon';
+      constructor(message?: string, optsOrError?: ChainErrorOptions | Error | null, skipCauseMessage?: boolean) {
         super(message, optsOrError, skipCauseMessage);
       }
     }

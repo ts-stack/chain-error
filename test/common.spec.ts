@@ -1,8 +1,8 @@
-import { ChainError } from '../src/chain-error';
-import { ChainErrorOptions } from '../src/types';
-import { cleanStack } from './common';
+import { ChainError } from '#lib/chain-error.js';
+import { ChainErrorOptions } from '#lib/types.js';
+import { cleanStack } from './common.js';
 
-describe(`Common functionality for ChainError:`, () => {
+describe('Common functionality for ChainError:', () => {
   let nodestack: string;
   let err: Error;
   let actualStack: string;
@@ -15,7 +15,7 @@ describe(`Common functionality for ChainError:`, () => {
      * which are more than the default (10 frames) in Node v6.x.
      */
     Error.stackTraceLimit = 20;
-    nodestack = new Error().stack.split('\n').slice(4).join('\n');
+    nodestack = new Error().stack!.split('\n').slice(4).join('\n');
     nodestack = cleanStack(nodestack);
   });
 

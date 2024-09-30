@@ -1,6 +1,6 @@
-import * as assert from 'assert';
+import assert from 'assert';
 
-import { ChainError } from '../src/chain-error';
+import { ChainError } from '#lib/chain-error.js';
 
 describe('Tests the way informational properties are inherited with nested errors:', () => {
   let err1: Error;

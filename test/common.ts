@@ -4,7 +4,7 @@
  *
  * Common utility functions used in multiple tests.
  */
-export function cleanStack(stacktxt: string) {
+export function cleanStack(stacktxt: string = '') {
   return stacktxt
     .replace(/ +at Object.asyncJest[^\n]+\n/g, '')
     .replace(/ +at Object.<anonymous>[^\n]+.spec.ts:\d[^\n]+\n/g, '')
