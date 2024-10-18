@@ -1,5 +1,14 @@
+<a name="1.3.1"></a>
+# [1.3.1](https://github.com/ts-stack/chain-error/releases/tag/1.3.1) (2024-10-18)
+
+### Bug fix
+
+| Commit | Type | Description |
+| -- | -- | -- |
+| [a62b8a6103](https://github.com/ts-stack/chain-error/commit/a62b8a6103616ea8) | fix | fixed type for `chainErrorOptions.constructorOpt`. |
+
 <a name="1.3.0"></a>
-# [1.3.0](https://github.com/ts-stack/chain-error/releases/tag/1.3.0) (2024-09-30)
+## [1.3.0](https://github.com/ts-stack/chain-error/releases/tag/1.3.0) (2024-09-30)
 
 ### Features
 
