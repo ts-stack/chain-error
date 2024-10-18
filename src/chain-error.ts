@@ -87,7 +87,7 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
    */
   static getCause(err: Error): Error | null | undefined {
     assert.ok(types.isNativeError(err), 'err must be an Error');
-    return types.isNativeError((err as ChainError).cause) ? (err as ChainError).cause : null;
+    return types.isNativeError(err.cause) ? err.cause : null;
   }
 
   /**
@@ -103,8 +103,7 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
    * generally be plain objects (i.e., consisting only of `null`, `undefined`, `numbers`,
    * `booleans`, `strings`, `objects` and arrays containing only other plain objects).
    */
-  static getInfo<T extends ObjectAny = ObjectAny>(error: Error): T {
-    const err = error as ChainError;
+  static getInfo<T extends ObjectAny = ObjectAny>(err: Error): T {
     let info = {} as T;
 
     const cause = this.getCause(err);
@@ -112,8 +111,8 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
       info = this.getInfo(cause);
     }
 
-    if (err.info !== null && typeof err.info == 'object') {
-      Object.assign(info, err.info);
+    if ((err as ChainError).info !== null && typeof (err as ChainError).info == 'object') {
+      Object.assign(info, (err as ChainError).info);
     }
 
     return info;
