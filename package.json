@@ -21,7 +21,7 @@
 	"scripts": {
     "test": "yarn build-test && yarn esm-jest",
     "esm-jest": "yarn node --experimental-vm-modules --no-warnings=ExperimentalWarning --enable-source-maps $(yarn bin jest)",
-		"build": "tsc -b packages",
+		"build": "tsc -b tsconfig.build.json",
     "build-test": "tsc -b tsconfig.test.json"
 	},
 	"dependencies": {
