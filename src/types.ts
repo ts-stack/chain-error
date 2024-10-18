@@ -17,10 +17,12 @@ export interface ChainErrorOptions<T extends ObjectAny = ObjectAny> {
   cause?: Error;
   /**
    * If specified, then the stack trace for this error ends at function `constructorOpt`.
-   * Functions called by `constructorOpt` will not show up in the stack.
-   * This is useful when this class is subclassed.
+   * Functions called by `constructorOpt` will not show up in the stack. This is useful when this
+   * class is subclassed, and this option is passed as the second argument to
+   * `Error.captureStackTrace(this, constructorOpt)`.
    */
-  constructorOpt?: (...args: any[]) => any;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  constructorOpt?: Function;
   /**
    * Specifies arbitrary informational properties that
    * are available through the `ChainError.getInfo(err)` static class method.
