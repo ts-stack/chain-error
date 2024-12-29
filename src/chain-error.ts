@@ -1,5 +1,5 @@
 import assert from 'assert-plus';
-import { types } from 'node:util';
+import { inspect, types } from 'node:util';
 
 import { ChainErrorOptions, ObjectAny } from './types.js';
 
@@ -157,13 +157,13 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
    * Returns a string containing the full stack trace, with all nested errors recursively
    * reported as `'caused by:' + err.stack`.
    */
-  static getFullStack(err: Error): string | undefined {
-    const cause = this.getCause(err);
+  static getFullStack(err: { cause?: unknown, stack?: string }): string | undefined {
+    const cause = err.cause;
     if (cause) {
       return err.stack + '\ncaused by: ' + this.getFullStack(cause);
     }
 
-    return err.stack;
+    return err.stack || inspect(err, false, 3);
   }
 
   override toString() {
