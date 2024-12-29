@@ -1,5 +1,6 @@
 import { ChainError } from '#lib/chain-error.js';
 import { ChainErrorOptions } from '#lib/types.js';
+import { describe, expect, it } from 'vitest';
 
 describe('Common functionality for ChainError:', () => {
   it('No arguments', () => {

@@ -1,5 +1,6 @@
 import { ChainError } from '#lib/chain-error.js';
 import { ChainErrorOptions } from '#lib/types.js';
+import { describe, expect, it } from 'vitest';
 
 describe('Test that inheriting from ChainError work as expected:', () => {
   let err: Error;

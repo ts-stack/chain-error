@@ -1,4 +1,5 @@
 import { ChainError } from '#lib/chain-error.js';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 const findCauseByName = ChainError.findCauseByName.bind(ChainError);
 const hasCauseWithName = ChainError.hasCauseWithName.bind(ChainError);

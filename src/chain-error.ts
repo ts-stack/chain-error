@@ -1,5 +1,5 @@
 import assert from 'assert-plus';
-import { types } from 'util';
+import { types } from 'node:util';
 
 import { ChainErrorOptions, ObjectAny } from './types.js';
 
