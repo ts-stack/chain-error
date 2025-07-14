@@ -1,5 +1,4 @@
 import { ChainError } from '#lib/chain-error.js';
-import { beforeEach, describe, expect, it } from 'vitest';
 
 const findCauseByName = ChainError.findCauseByName.bind(ChainError);
 const hasCauseWithName = ChainError.hasCauseWithName.bind(ChainError);
@@ -85,9 +84,9 @@ describe('findCauseByName()/hasCauseWithName():', () => {
   });
 
   it('should throw an Error when given bad argument types', () => {
-    expect(() => findCauseByName(null as any, 'AnError')).toThrowError(/err must be an Error/);
-    expect(() => hasCauseWithName(null as any, 'AnError')).toThrowError(/err must be an Error/);
-    expect(() => findCauseByName(err1, null as any)).toThrowError(/string.*is required/);
-    expect(() => hasCauseWithName(err1, null as any)).toThrowError(/string.*is required/);
+    expect(() => findCauseByName(null as any, 'AnError')).toThrow(/err must be an Error/);
+    expect(() => hasCauseWithName(null as any, 'AnError')).toThrow(/err must be an Error/);
+    expect(() => findCauseByName(err1, null as any)).toThrow(/string.*is required/);
+    expect(() => hasCauseWithName(err1, null as any)).toThrow(/string.*is required/);
   });
 });

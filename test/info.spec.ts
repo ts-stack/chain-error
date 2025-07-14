@@ -1,5 +1,4 @@
 import assert from 'assert';
-import { describe, expect, it } from 'vitest';
 
 import { ChainError } from '#lib/chain-error.js';
 

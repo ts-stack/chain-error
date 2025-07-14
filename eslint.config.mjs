@@ -45,7 +45,7 @@ export default tseslint.config(
       'website/*',
       'node_modules/*',
       'eslint.config.mjs',
-      '**/vitest.config.ts',
+      '**/jest.config.ts',
     ],
   },
 );

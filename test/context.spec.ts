@@ -1,6 +1,5 @@
 import { types } from 'util';
 import * as vm from 'vm';
-import { beforeAll, describe, expect, it } from 'vitest';
 
 describe('Cause works with errors:', () => {
   let err: Error;

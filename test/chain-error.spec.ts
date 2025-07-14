@@ -1,5 +1,4 @@
 import { ChainError } from '#lib/chain-error.js';
-import { describe, expect, it } from 'vitest';
 
 // tslint:disable: no-unused-expression
 

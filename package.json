@@ -19,10 +19,11 @@
 	"homepage": "https://github.com/ts-stack/chain-error",
 	"license": "MIT",
 	"scripts": {
-		"test": "yarn build-test && vitest",
+		"test": "yarn build-test && yarn esm-jest",
 		"build": "tsc -b tsconfig.build.json",
 		"build-test": "tsc -b tsconfig.test.json",
-		"clean": "rm -r dist*"
+		"clean": "rm -r dist*",
+		"esm-jest": "yarn node --experimental-vm-modules --no-warnings=ExperimentalWarning --enable-source-maps $(yarn bin jest)"
 	},
 	"dependencies": {
 		"assert-plus": "^1.0.0"
@@ -31,14 +32,16 @@
 		"@eslint/js": "^9.11.1",
 		"@types/assert-plus": "^1.0.8",
 		"@types/eslint__js": "^8.42.3",
+		"@types/jest": "^30.0.0",
 		"@types/node": "^20.16.7",
 		"eslint": "^8.57.1",
+		"jest": "^30.0.4",
 		"nodemon": "^3.1.7",
 		"prettier": "^3.3.3",
 		"rimraf": "^6.0.1",
+		"ts-node": "^10.9.2",
 		"typescript": "~5.5.4",
-		"typescript-eslint": "^8.7.0",
-		"vitest": "^2.1.8"
+		"typescript-eslint": "^8.7.0"
 	},
 	"keywords": [
 		"ts-stack",
