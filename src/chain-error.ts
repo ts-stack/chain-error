@@ -72,10 +72,7 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
       Object.assign(this.info, options.info);
     }
 
-    if (Error.captureStackTrace) {
-      const ctor = options.constructorOpt || this.constructor;
-      Error.captureStackTrace(this, ctor);
-    }
+    Error.captureStackTrace?.(this, options.constructorOpt || new.target);
   }
 
   /**
