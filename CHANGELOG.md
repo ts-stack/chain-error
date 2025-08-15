@@ -1,5 +1,14 @@
+<a name="1.3.2"></a>
+# [1.3.2](https://github.com/ts-stack/chain-error/releases/tag/1.3.2) (2025-08-15)
+
+### Bug fix
+
+| Commit | Type | Description |
+| -- | -- | -- |
+| [f89b71abac](https://github.com/ts-stack/chain-error/commit/f89b71abac) | fix | init `err.cause` only if it exists. |
+
 <a name="1.3.1"></a>
-# [1.3.1](https://github.com/ts-stack/chain-error/releases/tag/1.3.1) (2024-10-18)
+## [1.3.1](https://github.com/ts-stack/chain-error/releases/tag/1.3.1) (2024-10-18)
 
 ### Bug fix
 
