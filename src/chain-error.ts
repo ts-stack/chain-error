@@ -9,7 +9,7 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
    * Indicates that the new error was caused by `cause`. See `getCause()` below.
    * If unspecified, the cause will be `null`.
    */
-  override readonly cause?: Error;
+  declare cause?: Error;
   /**
    * Specifies arbitrary informational properties that
    * are available through the `ChainError.getInfo(err)` static class method.
@@ -56,7 +56,9 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
      * If we've been given a cause, record a reference to it and update our
      * message appropriately.
      */
-    this.cause = options.cause;
+    if (options.cause) {
+      this.cause = options.cause;
+    }
     if (this.cause && !skipCauseMessage) {
       this.message += ': ' + this.cause.message;
     }
@@ -154,7 +156,7 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
    * Returns a string containing the full stack trace, with all nested errors recursively
    * reported as `'caused by:' + err.stack`.
    */
-  static getFullStack(err: { cause?: unknown, stack?: string }): string | undefined {
+  static getFullStack(err: { cause?: unknown; stack?: string }): string | undefined {
     const cause = err.cause;
     if (cause) {
       return err.stack + '\ncaused by: ' + this.getFullStack(cause);
