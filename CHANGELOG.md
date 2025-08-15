@@ -1,5 +1,5 @@
-<a name="1.3.2"></a>
-# [1.3.2](https://github.com/ts-stack/chain-error/releases/tag/1.3.2) (2025-08-15)
+<a name="1.4.2"></a>
+# [1.4.2](https://github.com/ts-stack/chain-error/releases/tag/1.4.2) (2025-08-15)
 
 ### Bug fix
 
