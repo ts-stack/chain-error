@@ -36,12 +36,41 @@ describe('ChainError:', () => {
   });
 
   it('fullStack', () => {
-    const suberr = new ChainError('mid', new Error('root cause'));
-    const err = new ChainError('top', suberr);
-    const actualStack = ChainError.getFullStack(err);
-    expect(actualStack).toContain('ChainError: top: mid: root cause');
-    expect(actualStack).toContain('caused by: ChainError: mid: root cause');
-    expect(actualStack).toContain('caused by: Error: root cause');
+    function fn1() {
+      return fn2();
+    }
+    function fn2() {
+      return fn3();
+    }
+    function fn3() {
+      const err2 = fn4();
+      return new ChainError('err3', err2);
+    }
+    function fn4() {
+      return fn5();
+    }
+    function fn5() {
+      return fn6();
+    }
+    function fn6() {
+      const err1 = fn7();
+      return new ChainError('err2', err1);
+    }
+    function fn7() {
+      return fn8();
+    }
+    function fn8() {
+      return fn9();
+    }
+    function fn9() {
+      return new Error('err1');
+    }
+
+    const err3 = fn1();
+    const actualStack = ChainError.getFullStack(err3);
+    expect(actualStack).toContain('ChainError: err3: err2: err1');
+    expect(actualStack).toContain('caused by: ChainError: err2: err1');
+    expect(actualStack).toContain('caused by: Error: err1');
   });
 
   it('no arguments', () => {

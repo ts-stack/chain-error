@@ -156,13 +156,28 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
    * Returns a string containing the full stack trace, with all nested errors recursively
    * reported as `'caused by:' + err.stack`.
    */
-  static getFullStack(err: { cause?: unknown; stack?: string }): string | undefined {
+  static getFullStack(err: Error): string {
+    return this.getFullStackArr(err).join('\ncaused by: ');
+  }
+
+  /**
+   * Returns a string containing the full stack trace, with all nested errors recursively
+   * reported as `'caused by:' + err.stack`.
+   */
+  static getFullStackArr(err: { cause?: unknown; stack?: string }): string[] {
     const cause = err.cause;
     if (cause) {
-      return err.stack + '\ncaused by: ' + this.getFullStack(cause);
+      const fullStackArr = this.getFullStackArr(cause);
+      // eslint-disable-next-line prefer-const
+      let [fullStack, ...restStack] = fullStackArr;
+      const splitedStack = (err.stack || '').split('\n');
+      const withoutFistLines = splitedStack.slice(2).join('\n');
+      const index = fullStack.lastIndexOf(withoutFistLines);
+      fullStack = fullStack.slice(0, index-1);
+      return [err.stack || '', fullStack, ...restStack];
     }
 
-    return err.stack || inspect(err, false, 3);
+    return [err.stack || inspect(err, false, 3)];
   }
 
   override toString() {
