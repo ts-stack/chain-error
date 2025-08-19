@@ -1,5 +1,14 @@
+<a name="1.5.0"></a>
+# [1.5.0](https://github.com/ts-stack/chain-error/releases/tag/1.5.0) (2025-08-20)
+
+### Features
+
+| Commit | Type | Description |
+| -- | -- | -- |
+| [384bb74834](https://github.com/ts-stack/chain-error/commit/384bb74834) | feat | If `error.cause.trace` has common trace lines with `error.trace`, they are now removed from `error.cause.trace` (using `ChainError.getFullStack()`). |
+
 <a name="1.4.2"></a>
-# [1.4.2](https://github.com/ts-stack/chain-error/releases/tag/1.4.2) (2025-08-15)
+## [1.4.2](https://github.com/ts-stack/chain-error/releases/tag/1.4.2) (2025-08-15)
 
 ### Bug fix
 
