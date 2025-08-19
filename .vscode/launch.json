@@ -9,27 +9,31 @@
       "args": ["--runInBand"],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
       "windows": {
         "program": "${workspaceFolder}/node_modules/jest/bin/jest",
       }
     },
     {
+      "name": "Jest Current File",
       "type": "node",
       "request": "launch",
-      "name": "Jest Current File",
-      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "preLaunchTask": "npm: build-test",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "--enable-source-maps",
+        "--experimental-vm-modules",
+        "--no-warnings=ExperimentalWarning",
+        "${workspaceFolder}/node_modules/jest/bin/jest.js"
+      ],
       "args": [
         "${fileBasenameNoExtension}",
-        "--config",
-        "jest.config.js"
+        "--runInBand"
       ],
+      "env": {
+        "NODE_ENV": "test"
+      },
       "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
-      "windows": {
-        "program": "${workspaceFolder}/node_modules/jest/bin/jest",
-      }
+      "internalConsoleOptions": "neverOpen"
     }
   ]
 }
