@@ -46,7 +46,7 @@ export class ChainError<T extends ObjectAny = ObjectAny> extends Error {
     /**
      * If we've been given a name, apply it now.
      */
-    if (options.name) {
+    if (options.name !== undefined) {
       this.name = options.name;
     }
 
