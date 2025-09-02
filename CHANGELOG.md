@@ -1,5 +1,14 @@
+<a name="1.5.1"></a>
+# [1.5.1](https://github.com/ts-stack/chain-error/releases/tag/1.5.1) (2025-09-02)
+
+### Features
+
+| Commit | Type | Description |
+| -- | -- | -- |
+| [5a6ba10757](https://github.com/ts-stack/chain-error/commit/5a6ba10757) | fix | If `chainErrorOptions.name !== undefined` such a name is taken into account even if it has an empty string. |
+
 <a name="1.5.0"></a>
-# [1.5.0](https://github.com/ts-stack/chain-error/releases/tag/1.5.0) (2025-08-20)
+## [1.5.0](https://github.com/ts-stack/chain-error/releases/tag/1.5.0) (2025-08-20)
 
 ### Features
 

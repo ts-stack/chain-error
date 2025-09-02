@@ -1,7 +1,7 @@
 {
 	"name": "@ts-stack/chain-error",
 	"type": "module",
-	"version": "1.5.0",
+	"version": "1.5.1",
 	"exports": {
 		"./package.json": {
 			"default": "./package.json"
