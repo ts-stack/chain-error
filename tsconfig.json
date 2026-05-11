@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
+    "types": ["node", "jest"],
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "declaration": true,
@@ -25,5 +26,6 @@
   "include": [
     "src",
     "test"
-  ]
+  ],
+  "packageManager": "yarn@4.14.1"
 }
